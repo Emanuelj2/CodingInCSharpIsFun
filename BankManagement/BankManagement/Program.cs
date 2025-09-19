@@ -31,7 +31,7 @@ class Program
                     BankingOperations();
                     break;
                 case "2":
-                    // To-Do List logic placeholder
+                    toDoList();
                     break;
                 case "3":
                     isRunning = false;
@@ -84,6 +84,7 @@ class Program
                         Withdraw();
                         break;
                     case "3":
+                        
                         isRunning = false;
                         break;
                     default:
@@ -164,8 +165,129 @@ class Program
         Console.ReadKey();
     }
 
+    static void toDoList()
+    {
+        bool isRunning = true;
+        while (isRunning)
+        {
+            Console.Clear();
+            Console.WriteLine("===To-Do List===");
+            Console.WriteLine("1. View To-Do List");
+            Console.WriteLine("2. Add To-Do Item");
+            Console.WriteLine("3. Remove To-Do Item");
+            Console.WriteLine("4. Update To-Do List");
+            Console.WriteLine("5. Main Menu");
+            Console.WriteLine("Enter your choice");
+            string? choice = Console.ReadLine();
+            switch (choice)
+            {
+                case "1":
+                    ViewToDoList();
+                    break;
+                case "2":
+                    AddToDoItem();
+                    break;
+                case "3":
+                    RemoveToDoItem();
+                    break;
+                case "4":
+                    UpdateToDoList();
+                    break;
+                case "5":
+                    isRunning = false;
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Press any key to try again...");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
 
+    static void ViewToDoList()
+    {
+        Console.Clear();
+        Console.WriteLine("===Your To-Do List===");
+        if (toDo.Count == 0)
+        {
+            Console.WriteLine("Your to-do list is empty.");
+        }
+        else
+        {
+            for (int i = 0; i < toDo.Count; i++)
+            {
+                Console.WriteLine($"{i + 1}. {toDo[i]}");
+            }
+        }
+        Console.WriteLine("Press any key to return to the To-Do Menu...");
+        Console.ReadKey();
+    }
 
+    static void AddToDoItem()
+    {
+        Console.WriteLine("Enter a new to-do item:");
+        string? item = Console.ReadLine();
+        if (!string.IsNullOrWhiteSpace(item))
+        {
+            toDo.Add(item);
+            Console.WriteLine("Item added to the to-do list.");
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a non-empty item.");
+        }
+    }
 
+    static void RemoveToDoItem()
+    {
+        Console.WriteLine("Enter the number of the item to remove:");
+        string? input = Console.ReadLine();
+        if (int.TryParse(input, out int index))
+        {
+            if (index > 0 && index <= toDo.Count)
+            {
+                toDo.RemoveAt(index - 1);
+                Console.WriteLine("Item removed from the to-do list.");
+            }
+            else
+            {
+                Console.WriteLine("Invalid index. Please enter a valid item number.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
+    }
+    static void UpdateToDoList()
+    {
+        Console.WriteLine("Enter the number of the item to Update:");
+        string? input = Console.ReadLine();
+        if (int.TryParse(input, out int index))
+        {
+            if (index > 0 && index <= toDo.Count)
+            {
+                Console.WriteLine("Enter the updated to-do item:");
+                string? updatedItem = Console.ReadLine();
+                if (!string.IsNullOrWhiteSpace(updatedItem))
+                {
+                    toDo[index - 1] = updatedItem;
+                    Console.WriteLine("Item updated in the to-do list.");
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter a non-empty item.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Invalid index. Please enter a valid item number.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid input. Please enter a valid number.");
+        }
+    }
 
 }
