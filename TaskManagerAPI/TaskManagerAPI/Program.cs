@@ -1,8 +1,11 @@
+// Program.cs - Main application entry point
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using TaskManagerAPI.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -36,7 +39,7 @@ builder.Services.AddCors(options =>
 
 // Register services
 builder.Services.AddSingleton<ITaskService, TaskService>();
-//builder.Services.AddSingleton<IProjectService, ProjectService>();
+builder.Services.AddSingleton<IProjectService, ProjectService>();
 
 var app = builder.Build();
 

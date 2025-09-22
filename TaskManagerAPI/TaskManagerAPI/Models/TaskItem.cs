@@ -1,10 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-namespace TaskManagerAPI.Models
+namespace TaskManagementAPI.Models
 {
     public class TaskItem
     {
-        int Id { get; set; }
+        public int Id { get; set; }
 
         [Required(ErrorMessage = "Title is required")]
         [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
@@ -19,8 +20,7 @@ namespace TaskManagerAPI.Models
         [Required]
         public TaskPriority Priority { get; set; } = TaskPriority.Medium;
 
-        
-        public int ProjectId { get; set; }
+        public int? ProjectId { get; set; }
 
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -29,13 +29,10 @@ namespace TaskManagerAPI.Models
 
         public DateTime? CompletedAt { get; set; }
 
-
         [StringLength(100, ErrorMessage = "Assignee name cannot exceed 100 characters")]
         public string? AssignedTo { get; set; }
 
         public List<string> Tags { get; set; } = new List<string>();
-
-
     }
 
     public class CreateTaskRequest
@@ -48,37 +45,35 @@ namespace TaskManagerAPI.Models
         public string Description { get; set; } = string.Empty;
 
         public TaskPriority Priority { get; set; } = TaskPriority.Medium;
-        public int ProjectId { get; set; }
+
+        public int? ProjectId { get; set; }
+
         public DateTime? DueDate { get; set; }
 
         [StringLength(100, ErrorMessage = "Assignee name cannot exceed 100 characters")]
         public string? AssignedTo { get; set; }
+
         public List<string> Tags { get; set; } = new List<string>();
     }
 
     public class UpdateTaskRequest
     {
-        [Required(ErrorMessage = "Title is required")]
         [StringLength(100, ErrorMessage = "Title cannot exceed 100 characters")]
-        public string Title { get; set; } = string.Empty;
+        public string? Title { get; set; }
+
         [StringLength(500, ErrorMessage = "Description cannot exceed 500 characters")]
-        public string Description { get; set; } = string.Empty;
-        public TaskStatus Status { get; set; } = TaskStatus.Todo;
-        public TaskPriority Priority { get; set; } = TaskPriority.Medium;
+        public string? Description { get; set; }
+
+        public TaskStatus? Status { get; set; }
+
+        public TaskPriority? Priority { get; set; }
+
         public DateTime? DueDate { get; set; }
+
         [StringLength(100, ErrorMessage = "Assignee name cannot exceed 100 characters")]
         public string? AssignedTo { get; set; }
-        public List<string> Tags { get; set; } = new List<string>();
-    }
 
-
-    /// Enumeration for task priority levels and statuses.
-    public enum TaskPriority
-    {
-        Low,
-        Medium,
-        High,
-        Critical
+        public List<string>? Tags { get; set; }
     }
 
     public enum TaskStatus
@@ -88,5 +83,13 @@ namespace TaskManagerAPI.Models
         Review,
         Completed,
         Cancelled
+    }
+
+    public enum TaskPriority
+    {
+        Low,
+        Medium,
+        High,
+        Critical
     }
 }
