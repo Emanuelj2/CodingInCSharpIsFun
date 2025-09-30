@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using MVCApplication.Data;
+using MVCApplication.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 
 //connect to the database
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -36,6 +38,12 @@ app.MapControllerRoute(
     name: "products",
     pattern: "products/{action=Index}/{id?}",
     defaults: new { controller = "Product" })
+    .WithStaticAssets();
+
+app.MapControllerRoute(
+    name: "invoices",
+    pattern: "invoices/{action=Index}/{id?}",
+    defaults: new { controller = "Invoice" })
     .WithStaticAssets();
 
 app.Run();

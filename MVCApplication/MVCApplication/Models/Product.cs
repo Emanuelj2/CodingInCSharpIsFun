@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCApplication.Models
 {
@@ -13,6 +14,7 @@ namespace MVCApplication.Models
 
         [Required]
         [Range(0.01, 10000.00)]
+        [Precision(18, 2)]
         public decimal Price { get; set; }
     }
 }

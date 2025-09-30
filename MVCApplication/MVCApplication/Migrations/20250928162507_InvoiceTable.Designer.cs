@@ -4,6 +4,7 @@ using MVCApplication.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCApplication.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250928162507_InvoiceTable")]
+    partial class InvoiceTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -74,38 +77,6 @@ namespace MVCApplication.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Invoices");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Address = "123 Main St",
-                            ClientName = "Client A",
-                            DueDate = new DateOnly(2023, 1, 15),
-                            Email = "exmaple1@ecample.com",
-                            IssueDate = new DateOnly(2023, 1, 1),
-                            Number = "INV-001",
-                            Phone = "123-456-7890",
-                            Quantity = 1,
-                            Service = "Web Design",
-                            Status = "Paid",
-                            UnitPrice = 500.00m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Address = "456 Elm St",
-                            ClientName = "Client B",
-                            DueDate = new DateOnly(2023, 2, 15),
-                            Email = "example2@example.com",
-                            IssueDate = new DateOnly(2023, 2, 1),
-                            Number = "INV-002",
-                            Phone = "987-654-3210",
-                            Quantity = 1,
-                            Service = "SEO Services",
-                            Status = "Unpaid",
-                            UnitPrice = 300.00m
-                        });
                 });
 
             modelBuilder.Entity("MVCApplication.Models.Product", b =>
@@ -124,7 +95,6 @@ namespace MVCApplication.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");

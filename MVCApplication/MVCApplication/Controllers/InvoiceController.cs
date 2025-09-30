@@ -4,39 +4,37 @@ using MVCApplication.Models;
 
 namespace MVCApplication.Controllers
 {
-    public class ProductController : Controller
+    public class InvoiceController : Controller
     {
         public readonly AppDbContext _db;
-
-        public ProductController(AppDbContext db)
+        public InvoiceController(AppDbContext db)
         {
             _db = db;
         }
 
+
         public IActionResult Index()
         {
-            List<Product> objProductList = _db.Products.ToList();
-            return View(objProductList);
+            List<Invoice> objInvoiceList = _db.Invoices.OrderByDescending(i => i.Id).ToList();
+            return View(objInvoiceList);
         }
 
         public IActionResult Create()
         {
             return View();
         }
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
+        public IActionResult Create(Invoice obj)
         {
             if (ModelState.IsValid)
             {
-                _db.Products.Add(obj);
+                _db.Invoices.Add(obj);
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(obj);
         }
-
-
-
     }
 }
