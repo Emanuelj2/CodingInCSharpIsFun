@@ -10,5 +10,8 @@ public class Program
         FindTarget.FindTargetLinear(numbers, target);
         FindTarget.FindTargetBinarySearch(numbers, target);
 
+        int[] result = FindTarget.twoSum(numbers, 9);
+        Console.WriteLine($"Two Sum Result Indices: [{string.Join(", ", result)}]");
+
     }
 }
