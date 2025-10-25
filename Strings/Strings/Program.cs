@@ -1,6 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
 
+using System.ComponentModel.DataAnnotations;
 using System.Security.Cryptography;
 
 public class Program
@@ -22,8 +23,8 @@ public class Program
         Console.WriteLine($"Counting occurrences of character '{targetChar}' in string \"{str1}\":");
         int count = letterCount(str1, targetChar);
         Console.WriteLine($"The character '{targetChar}' appears {count} times in \"{str1}\".");
-
-
+        var toupper = toUpperCase("Hello World");
+        Console.WriteLine($"Uppercase conversion without built-in methods: {toupper}\n");
 
 
     }
@@ -87,6 +88,21 @@ public class Program
             right--;
         }
         return true;
+    }
+
+    public static string toUpperCase(string str)
+    {
+        string result = "";
+        for(int i = 0; i < str.Length; i++)
+        {
+            char c = str[i];
+            if (c >= 'a' && c <= 'z')
+            {
+                c = (char)(c - ('a' - 'A'));
+            }
+            result += c;
+        }
+        return result;
     }
 
 
