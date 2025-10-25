@@ -36,5 +36,28 @@
             
             return -1;
         }
+
+        public static int[] twoSum(int[] nums, int target )
+        {
+            Dictionary<int, int> hashmap = new();
+
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int complement = target - nums[i];
+                if (hashmap.ContainsKey(complement))
+                {
+                    return new int[] {hashmap[complement], i};
+                }
+
+                if(!hashmap.ContainsKey(complement))
+                {
+                    hashmap[nums[i]] = i;
+                }
+            }
+
+            return new int[] {};
+        }
+
+
     }
 }
