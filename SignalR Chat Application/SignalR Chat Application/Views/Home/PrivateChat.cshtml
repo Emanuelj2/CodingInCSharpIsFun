@@ -1,0 +1,119 @@
+﻿@{
+    ViewData["Title"] = "Private Chat";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Private Chat</h1>
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Online Users</h5>
+                </div>
+                <div class="card-body">
+                    <div id="usernameSetup" class="mb-3">
+                        <input type="text" id="usernameInput" class="form-control mb-2" placeholder="Enter your username" />
+                        <button class="btn btn-primary btn-sm w-100" id="setUsernameButton">Set Username</button>
+                    </div>
+                    <div id="currentUsername" style="display:none;" class="alert alert-info mb-3">
+                        You: <strong id="displayUsername"></strong>
+                    </div>
+                    <ul id="usersList" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Private Messages</h5>
+                </div>
+                <div class="card-body">
+                    <div id="privateMessages" class="border p-3 mb-3" style="height: 400px; overflow-y: auto;"></div>
+                    <div class="input-group">
+                        <input type="text" id="recipientInput" class="form-control" placeholder="Recipient username" />
+                        <input type="text" id="privateMessageInput" class="form-control" placeholder="Type a message..." />
+                        <button class="btn btn-success" id="sendPrivateButton">Send Private</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+    <script>
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+
+        connection.on("ReceivePrivateMessage", function (sender, message, recipient) {
+            const msg = document.createElement("div");
+            msg.className = "mb-2 p-2 bg-light rounded";
+            if (recipient) {
+                msg.innerHTML = `<small class="text-muted">To ${escapeHtml(recipient)}:</small><br><strong>You:</strong> ${escapeHtml(message)}`;
+            } else {
+                msg.innerHTML = `<small class="text-muted">From ${escapeHtml(sender)}:</small><br>${escapeHtml(message)}`;
+            }
+            document.getElementById("privateMessages").appendChild(msg);
+            document.getElementById("privateMessages").scrollTop = document.getElementById("privateMessages").scrollHeight;
+        });
+
+        connection.on("UpdateUserList", function (users) {
+            const usersList = document.getElementById("usersList");
+            usersList.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement("li");
+                li.className = "list-group-item list-group-item-action";
+                li.style.cursor = "pointer";
+                li.textContent = user;
+                li.onclick = function() {
+                    document.getElementById("recipientInput").value = user;
+                };
+                usersList.appendChild(li);
+            });
+        });
+
+        connection.on("UsernameSet", function (username) {
+            document.getElementById("usernameSetup").style.display = "none";
+            document.getElementById("currentUsername").style.display = "block";
+            document.getElementById("displayUsername").textContent = username;
+        });
+
+        connection.on("ReceiveError", function (error) {
+            alert(error);
+        });
+
+        connection.start().catch(err => console.error(err.toString()));
+
+        document.getElementById("setUsernameButton").addEventListener("click", function() {
+            const username = document.getElementById("usernameInput").value.trim();
+            if (username) {
+                connection.invoke("SetUsername", username).catch(err => console.error(err.toString()));
+            }
+        });
+
+        document.getElementById("sendPrivateButton").addEventListener("click", sendPrivateMessage);
+        document.getElementById("privateMessageInput").addEventListener("keypress", function(e) {
+            if (e.key === 'Enter') sendPrivateMessage();
+        });
+
+        function sendPrivateMessage() {
+            const recipient = document.getElementById("recipientInput").value.trim();
+            const message = document.getElementById("privateMessageInput").value.trim();
+
+            if (recipient && message) {
+                connection.invoke("SendPrivateMessage", recipient, message).catch(err => console.error(err.toString()));
+                document.getElementById("privateMessageInput").value = '';
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+}

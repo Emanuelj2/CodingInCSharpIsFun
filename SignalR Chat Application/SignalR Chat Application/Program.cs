@@ -1,13 +1,20 @@
-using SignalR_Chat_Application.Hub;
-
+﻿using SignalR_Chat_Application.Hub;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add detailed logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-//add the siganlr service
-builder.Services.AddSignalR();
+// Add SignalR with detailed options
+builder.Services.AddSignalR(options =>
+{
+    options.EnableDetailedErrors = true;
+});
 
 var app = builder.Build();
 
@@ -15,23 +22,21 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-//add the hub route
+// Map the hub
 app.MapHub<ChatHub>("/chatHub");
+
+Console.WriteLine("🚀 Application started - Hub mapped to /chatHub");
 
 app.Run();

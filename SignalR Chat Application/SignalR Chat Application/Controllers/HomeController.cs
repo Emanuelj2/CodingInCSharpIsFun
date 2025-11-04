@@ -23,6 +23,18 @@ namespace SignalR_Chat_Application.Controllers
             return View();
         }
 
+        
+
+        public IActionResult PrivateChat()
+        {
+            return View();
+        }
+
+        public IActionResult GroupChat()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

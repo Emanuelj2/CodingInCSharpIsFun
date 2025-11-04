@@ -7,8 +7,4 @@
     <RootNamespace>SignalR_Chat_Application</RootNamespace>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="9.0.10" />
-  </ItemGroup>
-
 </Project>

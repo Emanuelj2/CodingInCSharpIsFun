@@ -1,4 +1,7 @@
-﻿namespace SignalR_Chat_Application.Hub
+﻿using Microsoft.AspNetCore.SignalR;
+using System.Collections.Concurrent;
+
+namespace SignalR_Chat_Application.Hub
 {
     using Microsoft.AspNetCore.SignalR;
     using System.Collections.Concurrent;
@@ -11,10 +14,21 @@
 
 
         //send message to all connected clients
-        public async Task SendMessage(string user, string messasge)
+        public async Task SendMessage(string user, string message)
         {
             //brodcast message to all connected clients
-            await Clients.All.SendAsync("ReceiveMessage", user, messasge);
+            try
+            {
+                Console.WriteLine($"SendMessage called - User: {user}, Message: {message}");
+                await Clients.All.SendAsync("ReceiveMessage", user, message);
+                Console.WriteLine("Message sent successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR in SendMessage: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                throw;
+            }
         }
 
         //send private message to specific user
@@ -33,7 +47,7 @@
                 await Clients.Client(recipientConnectionId).SendAsync("ReceivePrivateMessage", senderUsername, message);
 
                 //send conformation back to sender
-                await Clients.Caller.SendAsync("RecievedPrivateMessage", senderUsername, message, recipientUsername);
+                await Clients.Caller.SendAsync("ReceivePrivateMessage", senderUsername, message, recipientUsername);
             }
             else
             {
@@ -67,7 +81,7 @@
             await Clients.Group(groupName).SendAsync("ReceiveMessage", groupName, username, message);
         }
 
-        public async Task SetUsernaem(string username)
+        public async Task SetUsername(string username)
         {
             //remove the old username if exists
             var oldUsername = Context.Items["Username"]?.ToString();
@@ -88,19 +102,27 @@
         //when a client disconnects
         public override async Task OnConnectedAsync()
         {
+            Console.WriteLine($"✅ Client connected: {Context.ConnectionId}");
             await base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
+            Console.WriteLine($"❌ Client disconnected: {Context.ConnectionId}");
+            if (exception != null)
+            {
+                Console.WriteLine($"Disconnect reason: {exception.Message}");
+            }
+
             var username = Context.Items["Username"]?.ToString();
             if (!string.IsNullOrEmpty(username))
             {
                 ConnectedUsers.TryRemove(username, out _);
-                //notify all clients about online users
                 await Clients.All.SendAsync("UpdateUserList", ConnectedUsers.Keys.ToList());
             }
             await base.OnDisconnectedAsync(exception);
         }
+
+        
     }
 }
