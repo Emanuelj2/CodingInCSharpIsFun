@@ -1,0 +1,33 @@
+﻿
+@model List<Product>
+
+@{
+    ViewData["Title"] = "Product List";
+}
+
+<p>This is where we will list all our products.</p>
+<div class="card table-responsive">
+    <table class="table table-striped table-hover">
+        <thead >
+            <tr>
+                <th>Product ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var product in Model)
+            {
+                <tr>
+                    <td>@product.Id</td>
+                    <td>@product.Name</td>
+                    <td>@product.Description</td>
+                    <td>@product.Price.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
