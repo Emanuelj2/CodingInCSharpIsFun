@@ -18,5 +18,8 @@ public class Program
         int maxSubarraySum = MaximumSubarray.MaxSubarray(array);
         Console.WriteLine($"Maximum Subarray Sum: {maxSubarraySum}");
 
+        int[] height = { 1, 8, 6, 2, 5, 4, 8, 3, 7 }; //the answer is 49
+        int maxWater = ContainerWithMostWater.MaxWater(height);
+        Console.WriteLine($"Maximum Water Container Area: {maxWater}");
     }
 }
