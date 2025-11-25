@@ -1,4 +1,5 @@
 ﻿using Arrays.ArrayFunctions;
+
 public class Program
 {
     public static void Main(string[] args)
@@ -12,6 +13,10 @@ public class Program
 
         int[] result = FindTarget.twoSum(numbers, 9);
         Console.WriteLine($"Two Sum Result Indices: [{string.Join(", ", result)}]");
+
+        int[] array = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
+        int maxSubarraySum = MaximumSubarray.MaxSubarray(array);
+        Console.WriteLine($"Maximum Subarray Sum: {maxSubarraySum}");
 
     }
 }
