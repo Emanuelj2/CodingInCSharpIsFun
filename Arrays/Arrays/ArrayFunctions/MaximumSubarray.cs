@@ -20,6 +20,7 @@ namespace Arrays.ArrayFunctions
                 maxSoFar = Math.Max(maxSoFar, maxEndingHere);
             }
             return maxSoFar;
+
         }
 
         // Time Complexity: O(n)
