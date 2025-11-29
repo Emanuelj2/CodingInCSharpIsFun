@@ -21,5 +21,8 @@ public class Program
         int[] height = { 1, 8, 6, 2, 5, 4, 8, 3, 7 }; //the answer is 49
         int maxWater = ContainerWithMostWater.MaxWater(height);
         Console.WriteLine($"Maximum Water Container Area: {maxWater}");
+
+        int[] nums = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int[] even = EvenNums.EvenNumbers(nums);
     }
 }
